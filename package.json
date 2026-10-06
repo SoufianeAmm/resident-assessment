@@ -1,0 +1,11 @@
+{
+  "name": "resident-assessment",
+  "version": "1.0.0",
+  "description": "Life Enrichment Assessment Portal for senior residents and staff",
+  "scripts": {
+    "server": "cd server && node index.js",
+    "client": "cd client && npm run dev",
+    "dev:server": "cd server && node --watch index.js",
+    "install:all": "cd server && npm install && cd ../client && npm install"
+  }
+}
