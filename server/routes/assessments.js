@@ -26,12 +26,10 @@ router.post('/', requireRole('resident'), (req, res) => {
 
     res.status(201).json({ message: 'Assessment saved. AI recommendations updating...' });
 
-    // Trigger AI recommendations asynchronously — only if key is configured
-    if (process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY !== 'your_anthropic_api_key_here') {
-      generateRecommendations(req.user.id).catch((err) => {
-        console.error(`AI recommendation error for resident ${req.user.id}:`, err.message);
-      });
-    }
+    // Trigger AI recommendations asynchronously (local Ollama)
+    generateRecommendations(req.user.id).catch((err) => {
+      console.error(`AI recommendation error for resident ${req.user.id}:`, err.message);
+    });
   } catch {
     res.status(500).json({ error: 'Failed to save assessment.' });
   }

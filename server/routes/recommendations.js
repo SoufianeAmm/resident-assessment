@@ -76,17 +76,12 @@ router.post('/regenerate/:residentId', authenticateToken, async (req, res) => {
     return res.status(403).json({ error: 'Forbidden.' });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === 'your_anthropic_api_key_here') {
-    return res.status(503).json({ error: 'AI recommendations are not configured. Add your ANTHROPIC_API_KEY to server/.env and restart the server.' });
-  }
-
   try {
     const recs = await generateRecommendations(residentId);
     res.json({ message: `AI generated ${recs.length} recommendations.`, count: recs.length });
   } catch (err) {
     console.error('AI regeneration error:', err.message);
-    const detail = err.status === 401 ? 'Invalid API key.' : err.status === 429 ? 'Rate limit hit — try again in a moment.' : err.message;
-    res.status(500).json({ error: `AI generation failed: ${detail}` });
+    res.status(500).json({ error: `AI generation failed: ${err.message}` });
   }
 });
 
